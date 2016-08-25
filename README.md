@@ -52,6 +52,8 @@ server {
 }
 ```
 
+Start the container
+
 ```bash
 docker run \
   -it --rm \
