@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -z "${LE_CONTACT_EMAIL:=}" ]; then
+    echo "Environment variable LE_CONTACT_EMAIL not set"
+    echo "No email will be associated with the registration request"
+else
+    CONTACT_EMAIL="$LE_CONTACT_EMAIL"
+fi
+
+if [ -n "${LE_STAGING:=}" ] && [ "$LE_STAGING" != "0" ]; then
+    CA="https://acme-staging.api.letsencrypt.org/directory"
+fi
