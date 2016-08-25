@@ -16,5 +16,5 @@ COPY nginx/* /etc/nginx/
 COPY letsencrypt/* /opt/letsencrypt.sh/
 COPY supervisor/* /
 
-VOLUME ["/opt/letsencrypt.sh/certs"]
+VOLUME ["/opt/letsencrypt.sh/certs", "/opt/letsencrypt.sh/accounts"]
 CMD /usr/bin/supervisord -c /supervisord.conf
