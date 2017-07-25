@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  nginx:
+    build:
+      context: ..
+    image: nginx-letsencrypt
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+      #- accounts:/opt/letsencrypt.sh/accounts
+      #- certs:/opt/letsencrypt.sh/certs
+      - accounts:/opt/dehydrated/accounts
+      - certs:/opt/dehydrated/certs
+    environment:
+      LE_CONTACT_EMAIL: example@example.com
+      LE_STAGING: '1'
+    ports:
+      - '8040:80'
+      - '8443:443'
+
+volumes:
+  certs:
+  accounts:
