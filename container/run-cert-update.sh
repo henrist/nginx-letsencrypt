@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 # prerequisite:
 # 1. /etc/ssl/certs/dhparam.pem must be generated
 # 2. nginx must be running and serving the well known directory
 
-cd /opt/letsencrypt.sh
+cd /opt/dehydrated
 
 while true; do
     # certificates are updated when docker container is run
@@ -16,7 +16,8 @@ while true; do
     echo "Checking if certificates needs updating"
 
     ./generate-domains.sh
-    ./letsencrypt.sh -c -f config
+    ./dehydrated --cron --accept-terms
+    /backward-compat.sh
     echo "Reloading nginx"
     kill -HUP $(cat /var/run/nginx.pid)
 done

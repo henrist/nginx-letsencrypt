@@ -1,20 +1,24 @@
-FROM nginx
-MAINTAINER Henrik Steen <henrist@henrist.net>
+FROM nginx:alpine
 
-RUN mkdir -p /var/www/letsencrypt \
-    && mkdir -p /opt/letsencrypt.sh \
-    && apt-get update \
-    && apt-get install --no-install-recommends --no-install-suggests -y \
-                                                        curl \
-                                                        supervisor \
-                                                        wget \
-    && wget -qO- "https://github.com/lukas2511/letsencrypt.sh/archive/6192b33ac21b185085aea620223aef3028a1b66e.tar.gz" \
-       | tar zx -C /opt/letsencrypt.sh --strip 1 \
-    && rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /var/www/dehydrated \
+    && mkdir -p /opt/dehydrated \
+    && apk add -Uuv \
+        # dehydrated uses bash
+        bash \
+        curl \
+        openssl \
+        supervisor \
+    && curl -sfSL "https://github.com/lukas2511/dehydrated/archive/v0.4.0.tar.gz" \
+       | tar zx -C /opt/dehydrated --strip 1 \
+    \
+    # provide backward compatibility with previous version
+    && ln -s /var/www/dehydrated /var/www/letsencrypt
 
 COPY nginx/* /etc/nginx/
-COPY letsencrypt/* /opt/letsencrypt.sh/
-COPY supervisor/* /
+COPY dehydrated/* /opt/dehydrated/
+COPY container/* /
 
-VOLUME ["/opt/letsencrypt.sh/certs", "/opt/letsencrypt.sh/accounts"]
-CMD /usr/bin/supervisord -c /supervisord.conf
+VOLUME ["/opt/dehydrated/certs", "/opt/dehydrated/accounts"]
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/usr/bin/supervisord", "-c", "/supervisord.conf"]

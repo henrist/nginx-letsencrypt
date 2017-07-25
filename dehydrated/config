@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ -z "${LE_CONTACT_EMAIL:=}" ]; then
     echo "Environment variable LE_CONTACT_EMAIL not set"
@@ -9,4 +9,13 @@ fi
 
 if [ -n "${LE_STAGING:=}" ] && [ "$LE_STAGING" != "0" ]; then
     CA="https://acme-staging.api.letsencrypt.org/directory"
+    CA_TERMS="https://acme-staging.api.letsencrypt.org/terms"
+fi
+
+# Backward compatibility, see entrypoint.sh
+if [ -n "${LE_ACCOUNTDIR:=}" ]; then
+    ACCOUNTDIR="$LE_ACCOUNTDIR"
+fi
+if [ -n "${LE_CERTDIR:=}" ]; then
+    CERTDIR="$LE_CERTDIR"
 fi

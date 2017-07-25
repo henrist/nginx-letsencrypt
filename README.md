@@ -3,18 +3,18 @@
 This Docker image lets you run nginx with self-updating Let's Encrypt
 certificates.
 
-Let's Encrypt setup is handled with https://github.com/lukas2511/letsencrypt.sh
+Let's Encrypt setup is handled with https://github.com/lukas2511/dehydrated
 
 The domains to be handled is generated from the contents of nginx configuration.
 
 ## Configuring vhosts to allow self-updating
 
-All vhosts must alias the `letsencrypt` folder. Make sure all vhosts for domains
+All vhosts must alias the `dehydrated` folder. Make sure all vhosts for domains
 listed in `domains.txt` contains:
 
 ```
     location /.well-known/acme-challenge {
-        alias /var/www/letsencrypt;
+        alias /var/www/dehydrated;
     }
 ```
 
@@ -27,8 +27,8 @@ server {
     listen 443 ssl;
     server_name example.com;
 
-    ssl_certificate /opt/letsencrypt.sh/certs/example.com/fullchain.pem;
-    ssl_certificate_key /opt/letsencrypt.sh/certs/example.com/privkey.pem;
+    ssl_certificate /opt/dehydrated/certs/example.com/fullchain.pem;
+    ssl_certificate_key /opt/dehydrated/certs/example.com/privkey.pem;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
     ssl_prefer_server_ciphers on;
@@ -36,7 +36,7 @@ server {
     ssl_dhparam /etc/ssl/certs/dhparam.pem;
 
     location /.well-known/acme-challenge {
-        alias /var/www/letsencrypt;
+        alias /var/www/dehydrated;
     }
 
     location / {
@@ -59,8 +59,8 @@ docker run \
   -it --rm \
   -e LE_CONTACT_EMAIL=example@example.com \
   -e LE_STAGING=1 \
-  -v letsencrypt-certs:/opt/letsencrypt.sh/certs \
-  -v letsencrypt-accounts:/opt/letsencrypt.sh/accounts \
+  -v dehydrated-certs:/opt/dehydrated/certs \
+  -v dehydrated-accounts:/opt/dehydrated/accounts \
   -v "$(pwd)/default.conf":/etc/nginx/conf.d/default.conf \
   -p 80:80 -p 443:443 \
   henrist/nginx-letsencrypt
