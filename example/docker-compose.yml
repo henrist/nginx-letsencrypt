@@ -12,11 +12,11 @@ services:
       - accounts:/opt/dehydrated/accounts
       - certs:/opt/dehydrated/certs
     environment:
-      LE_CONTACT_EMAIL: example@example.com
+      LE_CONTACT_EMAIL: nginx-test@hsw.no
       LE_STAGING: '1'
     ports:
       - '8040:80'
-      - '8443:443'
+      - '8041:443'
 
 volumes:
   certs:
