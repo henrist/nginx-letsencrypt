@@ -14,7 +14,7 @@ echo "INFO: Providing backward compatibility of certification storage location"
 # the old location. We work around this by symlinking directories
 cd /opt/letsencrypt.sh/certs/
 for d in *; do
-  if [ -d "/opt/letsencrypt.sh/certs/$d" ] && ! [ -f "/opt/dehydrated/certs/$d" ]; then
+  if [ -d "/opt/letsencrypt.sh/certs/$d" ] && ! [ -e "/opt/dehydrated/certs/$d" ]; then
     ln -s "/opt/letsencrypt.sh/certs/$d" "/opt/dehydrated/certs/$d"
   fi
 done
